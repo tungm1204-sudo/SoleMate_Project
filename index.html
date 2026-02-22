@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,15 +8,17 @@
     <link rel="icon" type="image/png" href="./img/Thiết%20kế%20chưa%20có%20tên.png">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
     <!-- Header -->
     <header class="header">
         <div class="header-container">
-            <div class="logo">
+            <div class="logo" style="cursor: pointer;" onclick="location.reload();" title="Click to reload">
                 <img src="./img/Thiết%20kế%20chưa%20có%20tên.png" alt="SoleMate Logo" class="logo-img">
                 <div class="logo-text">
                     <span class="logo-name">SoleMate</span>
@@ -29,10 +32,31 @@
                     <li><a href="#about">About</a></li>
                 </ul>
             </nav>
-            <button class="cart-btn" id="cartBtn">
-                <i class="fas fa-shopping-cart"></i>
-                <span class="cart-count" id="cartCount">0</span>
+            <button class="hamburger" id="hamburgerMenu">
+                <span></span>
+                <span></span>
+                <span></span>
             </button>
+            <div class="offcanvas-menu" id="offcanvasMenu">
+                <ul>
+                    <li><a href="#home" class="mobile-nav-link">Home</a></li>
+                    <li><a href="#products" class="mobile-nav-link">Products</a></li>
+                    <li><a href="#about" class="mobile-nav-link">About</a></li>
+                </ul>
+            </div>
+            <div class="header-right">
+                <button class="theme-toggle-btn" id="themeToggle" title="Toggle Dark Mode">
+                    <i class="fas fa-moon"></i>
+                </button>
+                <button class="wishlist-btn" id="wishlistBtn" title="Wishlist">
+                    <i class="far fa-heart"></i>
+                    <span class="wishlist-count" id="wishlistCount">0</span>
+                </button>
+                <button class="cart-btn" id="cartBtn">
+                    <i class="fas fa-shopping-cart"></i>
+                    <span class="cart-count" id="cartCount">0</span>
+                </button>
+            </div>
         </div>
     </header>
 
@@ -48,9 +72,17 @@
     <!-- Main Content -->
     <main class="main-content">
         <!-- Filter Section -->
-        <section class="filters" id="products">
+        <section class="filters reveal" id="products">
             <h2>Our Collection</h2>
-            
+
+            <!-- Promo Code Section -->
+            <div class="promo-container">
+                <input type="text" id="promoInput" placeholder="Enter promo code (e.g., SAVE10, SUMMER20)"
+                    maxlength="20">
+                <button id="applyPromoBtn">Apply</button>
+                <span id="promoMessage" class="promo-message"></span>
+            </div>
+
             <!-- Search & Sort Bar -->
             <div class="search-sort-container">
                 <div class="search-box">
@@ -64,6 +96,7 @@
                         <option value="price-low">Price: Low to High</option>
                         <option value="price-high">Price: High to Low</option>
                         <option value="name">Name: A-Z</option>
+                        <option value="rating">Highest Rated</option>
                     </select>
                 </div>
             </div>
@@ -73,6 +106,28 @@
                 <button class="filter-btn" data-filter="Nike">Nike</button>
                 <button class="filter-btn" data-filter="Adidas">Adidas</button>
                 <button class="filter-btn" data-filter="Puma">Puma</button>
+            </div>
+
+            <!-- Price Range Filter -->
+            <div class="price-filter-container">
+                <h3>Price Range</h3>
+                <div class="price-inputs">
+                    <div class="price-input-group">
+                        <label>Min:</label>
+                        <input type="number" id="minPrice" value="0" min="0" max="200">
+                        <span>$</span>
+                    </div>
+                    <div class="price-separator">-</div>
+                    <div class="price-input-group">
+                        <label>Max:</label>
+                        <input type="number" id="maxPrice" value="200" min="0" max="200">
+                        <span>$</span>
+                    </div>
+                </div>
+                <input type="range" id="priceRange" class="price-slider" min="0" max="200" value="200">
+                <div class="price-display">
+                    <span>$<span id="priceDisplay">0</span> - $<span id="priceDisplayMax">200</span></span>
+                </div>
             </div>
         </section>
 
@@ -84,8 +139,24 @@
         </section>
     </main>
 
+    <!-- Recently Viewed Products Section -->
+    <section class="recently-viewed-section reveal" id="recentlyViewed" style="display: none;">
+        <div class="max-width-container">
+            <h2>Recently Viewed</h2>
+            <div class="carousel-container">
+                <button class="carousel-btn prev" id="recentlyViewedPrev">
+                    <i class="fas fa-chevron-left"></i>
+                </button>
+                <div class="carousel-track" id="recentlyViewedTrack"></div>
+                <button class="carousel-btn next" id="recentlyViewedNext">
+                    <i class="fas fa-chevron-right"></i>
+                </button>
+            </div>
+        </div>
+    </section>
+
     <!-- Footer -->
-    <footer class="footer" id="about">
+    <footer class="footer reveal">
         <div class="footer-content">
             <div class="footer-section">
                 <h3>SoleMate</h3>
@@ -102,9 +173,10 @@
             <div class="footer-section">
                 <h4>Follow Us</h4>
                 <div class="social-links">
-                    <a href="#"><i class="fab fa-facebook"></i></a>
-                    <a href="#"><i class="fab fa-twitter"></i></a>
-                    <a href="#"><i class="fab fa-instagram"></i></a>
+                    <a href="https://www.facebook.com/nguyenminhtuoriginal" target="_blank" rel="noopener noreferrer"
+                        title="Follow on Facebook"><i class="fab fa-facebook"></i></a>
+                    <a href="https://www.instagram.com/nguyenminhtuoriginal/" target="_blank" rel="noopener noreferrer"
+                        title="Follow on Instagram"><i class="fab fa-instagram"></i></a>
                 </div>
             </div>
         </div>
@@ -112,6 +184,40 @@
             <p>&copy; 2026 SoleMate - Premium Sneaker Store. All Rights Reserved.</p>
         </div>
     </footer>
+
+    <!-- Checkout Modal -->
+    <div class="checkout-modal" id="checkoutModal">
+        <div class="checkout-content">
+            <div class="checkout-header">
+                <h2>Checkout</h2>
+                <button class="close-btn" id="closeCheckoutBtn">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <form id="checkoutForm" class="checkout-form">
+                <div class="form-group">
+                    <label for="checkoutName">Full Name *</label>
+                    <input type="text" id="checkoutName" placeholder="John Doe">
+                    <span class="error-message" id="nameError"></span>
+                </div>
+                <div class="form-group">
+                    <label for="checkoutPhone">Phone Number *</label>
+                    <input type="tel" id="checkoutPhone" placeholder="0912345678">
+                    <span class="error-message" id="phoneError"></span>
+                </div>
+                <div class="form-group">
+                    <label for="checkoutAddress">Delivery Address *</label>
+                    <textarea id="checkoutAddress" rows="3"
+                        placeholder="123 Sneaker Street, District 1, HCMC"></textarea>
+                    <span class="error-message" id="addressError"></span>
+                </div>
+                <div class="checkout-actions">
+                    <button type="button" class="btn-secondary" id="cancelCheckoutBtn">Cancel</button>
+                    <button type="submit" class="btn-primary" id="confirmCheckoutBtn">Confirm Order</button>
+                </div>
+            </form>
+        </div>
+    </div>
 
     <!-- Cart Modal -->
     <div class="cart-modal" id="cartModal">
@@ -131,6 +237,10 @@
                     <span id="subtotal">$0.00</span>
                 </div>
                 <div class="summary-row">
+                    <span>Discount:</span>
+                    <span id="discount">-$0.00</span>
+                </div>
+                <div class="summary-row">
                     <span>Shipping:</span>
                     <span id="shipping">$0.00</span>
                 </div>
@@ -148,12 +258,27 @@
 
     <!-- Product Card Template (for reference in JavaScript) -->
     <template id="productTemplate">
-        <div class="product-card" data-product-id="">
+        <div class="product-card reveal" data-product-id="">
             <div class="product-image">
                 <img src="" alt="" class="product-img" style="cursor: pointer;">
                 <div class="product-overlay">
+                    <div class="overlay-buttons">
+                        <button class="quick-view-mini-btn" title="Quick View">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                        <button class="wishlist-mini-btn" title="Add to Wishlist">
+                            <i class="far fa-heart"></i>
+                        </button>
+                    </div>
                     <button class="add-to-cart-btn">Add to Cart</button>
                 </div>
+            </div>
+            <div class="product-rating">
+                <div class="stars" data-rating="0">
+                    <span class="star">★</span><span class="star">★</span><span class="star">★</span><span
+                        class="star">★</span><span class="star">★</span>
+                </div>
+                <span class="rating-count">(0)</span>
             </div>
             <div class="product-info">
                 <p class="product-brand"></p>
@@ -176,11 +301,37 @@
                 <div class="quickview-details">
                     <p class="quickview-brand" id="quickviewBrand"></p>
                     <h2 class="quickview-name" id="quickviewName"></h2>
+                    <div class="quickview-rating" id="quickviewRating"></div>
                     <p class="quickview-price" id="quickviewPrice"></p>
+
+                    <!-- Size Selection -->
+                    <div class="size-selector">
+                        <label>Size:</label>
+                        <div class="size-options" id="sizeOptions"></div>
+                    </div>
+
+                    <!-- Color Selection -->
+                    <div class="color-selector">
+                        <label>Color:</label>
+                        <div class="color-options" id="colorOptions"></div>
+                    </div>
+
                     <p class="quickview-description" id="quickviewDescription"></p>
-                    <button class="btn-primary" id="quickviewAddToCart" style="width: 100%; margin-top: 1.5rem;">
-                        Add to Cart
-                    </button>
+
+                    <!-- Reviews Section -->
+                    <div class="reviews-section" id="reviewsSection">
+                        <h4>Customer Reviews</h4>
+                        <div class="reviews-list" id="reviewsList"></div>
+                    </div>
+
+                    <div class="quickview-actions">
+                        <button class="btn-primary" id="quickviewAddToCart" style="flex: 1;">
+                            Add to Cart
+                        </button>
+                        <button class="btn-wishlist" id="quickviewWishlist" title="Add to Wishlist">
+                            <i class="far fa-heart"></i>
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -194,6 +345,54 @@
         <i class="fas fa-arrow-up"></i>
     </button>
 
+    <!-- Keyboard Shortcuts Help Modal -->
+    <div class="keyboard-help-modal" id="keyboardHelpModal">
+        <div class="keyboard-help-content">
+            <button class="close-btn" id="closeKeyboardHelp">
+                <i class="fas fa-times"></i>
+            </button>
+            <h3>Keyboard Shortcuts</h3>
+            <div class="shortcuts-list">
+                <div class="shortcut-item">
+                    <span class="shortcut-key">Esc</span>
+                    <span class="shortcut-desc">Close modals</span>
+                </div>
+                <div class="shortcut-item">
+                    <span class="shortcut-key">?</span>
+                    <span class="shortcut-desc">Show this help</span>
+                </div>
+                <div class="shortcut-item">
+                    <span class="shortcut-key">C</span>
+                    <span class="shortcut-desc">Open cart</span>
+                </div>
+                <div class="shortcut-item">
+                    <span class="shortcut-key">W</span>
+                    <span class="shortcut-desc">Open wishlist</span>
+                </div>
+                <div class="shortcut-item">
+                    <span class="shortcut-key">F</span>
+                    <span class="shortcut-desc">Focus search</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Wishlist Modal -->
+    <div class="wishlist-modal" id="wishlistModal">
+        <div class="wishlist-content">
+            <div class="wishlist-header">
+                <h2>My Wishlist</h2>
+                <button class="close-btn" id="closeWishlistBtn">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="wishlist-items" id="wishlistItems">
+                <p class="empty-wishlist">Your wishlist is empty</p>
+            </div>
+        </div>
+    </div>
+
     <script src="script.js"></script>
 </body>
+
 </html>
