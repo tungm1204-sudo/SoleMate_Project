@@ -200,7 +200,7 @@ class Wishlist {
             this.items.push(product);
             this.saveWishlist();
             this.updateWishlistUI();
-            Toast.show(`♥ Added "${product.name}" to wishlist!`, 'success', 3000);
+            Toast.show(`Added "${product.name}" to wishlist!`, 'success', 3000);
             return true;
         }
         return false;
@@ -447,7 +447,7 @@ class ShoppingCart {
     }
 
     showAddToCartNotification(productName) {
-        Toast.show(`✓ Added "${productName}" to cart!`, 'success', 3000);
+        Toast.show(`Added "${productName}" to cart!`, 'success', 3000);
     }
 }
 
@@ -789,29 +789,33 @@ document.addEventListener('DOMContentLoaded', () => {
     const priceDisplay = document.getElementById('priceDisplay');
     const priceDisplayMax = document.getElementById('priceDisplayMax');
 
-    let minPriceFilter = 0;
-    let maxPriceFilter = 200;
-
+    // Use the existing global `minPriceFilter` and `maxPriceFilter` (avoid shadowing)
     function updatePriceDisplay() {
-        priceDisplay.textContent = minPriceFilter;
-        priceDisplayMax.textContent = maxPriceFilter;
+        priceDisplay.textContent = Number(minPriceFilter).toString();
+        priceDisplayMax.textContent = Number(maxPriceFilter).toString();
         updateProductDisplay();
     }
 
     minPriceInput.addEventListener('input', (e) => {
-        minPriceFilter = Math.min(parseInt(e.target.value), maxPriceFilter);
-        priceRangeSlider.value = maxPriceFilter;
+        const val = parseInt(e.target.value, 10);
+        minPriceFilter = isNaN(val) ? 0 : Math.min(val, maxPriceFilter);
+        // keep the slider range min in sync (slider controls max value)
+        priceRangeSlider.min = minPriceFilter;
         updatePriceDisplay();
     });
 
     maxPriceInput.addEventListener('input', (e) => {
-        maxPriceFilter = Math.max(parseInt(e.target.value), minPriceFilter);
+        const val = parseInt(e.target.value, 10);
+        maxPriceFilter = isNaN(val) ? 0 : Math.max(val, minPriceFilter);
         priceRangeSlider.value = maxPriceFilter;
         updatePriceDisplay();
     });
 
     priceRangeSlider.addEventListener('input', (e) => {
-        maxPriceFilter = parseInt(e.target.value);
+        const val = parseInt(e.target.value, 10);
+        maxPriceFilter = isNaN(val) ? 0 : val;
+        // reflect slider change in max input
+        maxPriceInput.value = maxPriceFilter;
         updatePriceDisplay();
     });
 
@@ -998,7 +1002,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         if (isValid) {
-            Toast.show('✓ Thank you for your purchase! Order confirmed.', 'success', 4000);
+            Toast.show('Thank you for your purchase! Order confirmed.', 'success', 4000);
             cart.items = [];
             cart.saveCart();
             cart.updateCartUI();
